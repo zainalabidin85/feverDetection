@@ -1,13 +1,11 @@
 # Jetson Object Detection
 
-Two independent scripts — kept separate on purpose, not merged:
-
-## `feverDetection_jetson.py` (current)
+## `feverDetection_jetson.py`
 
 A thin launcher, not a separate implementation. There is no Jetson-specific
 detection code: `RPI/feverDetection.py` already has zero Raspberry-Pi
 hardware calls (no local camera, no GPIO/I2C — it only talks to
-thermalCam-Pi and the ESP32 over HTTP), and Ultralytics automatically uses
+[thermalCam-Pi](https://github.com/zainalabidin85/thermalCam-Pi) and the ESP32 over HTTP), and Ultralytics automatically uses
 CUDA when it's available. So this file just adds `../RPI` to `sys.path` and
 runs `RPI/feverDetection.py` unmodified via `runpy` — **one shared model,
 one shared codebase**, instead of a second detection stack (e.g.
@@ -38,14 +36,3 @@ env var reference (`THERMALCAM_HOST`/`PORT`/`BASE`, `FEVER_MOVE_COOLDOWN`,
 etc.) — they all apply here unchanged. Verified to start and serve
 correctly (smoke-tested via `timeout 3 python3 feverDetection_jetson.py`);
 not yet tested on real Jetson hardware with CUDA/TensorRT.
-
-## `v2_thermalNet.py` (older, untouched)
-
-Older, self-contained script: does its own local pixel-intensity-to-°C
-calibration (single ground-truth reading fetched once per detection, no
-per-species normal ranges, no fever margin) and POSTs results to the
-Raspberry Pi. Left as-is for now.
-
-```
-python3 v2_thermalNet.py --input http://<pi_ip>:8080/video_feed
-```
