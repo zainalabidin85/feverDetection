@@ -2,7 +2,7 @@
 
 This device (a Raspberry Pi 5 or Jetson) has **no camera or MLX90614
 attached**. Sensor hardware lives on a separate device/project,
-**thermalCam-Pi** (a USB camera + MLX90614 IR point sensor, its own repo,
+**[thermalCam-Pi](https://github.com/zainalabidin85/thermalCam-Pi)** (a USB camera + MLX90614 IR point sensor, its own repo,
 default `http://<host>:5000`), which streams video and answers per-point
 temperature queries over HTTP. This device just consumes that API and runs
 inference. Three stages, kept deliberately separate:
